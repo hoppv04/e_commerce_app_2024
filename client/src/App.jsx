@@ -14,13 +14,22 @@ import ShoppingCheckout from "./pages/shopping-view/Checkout";
 import ShoppingAccount from "./pages/shopping-view/Accout";
 import CheckAuth from "./components/common/checkAuth";
 import UnAuthPage from "./pages/unauth-page";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkAuth } from "./store/auth-slice";
+import { Skeleton } from "./components/ui/skeleton";
 
 function App() {
-  const isAuthenticated = true;
-  const user = {
-    name: "Enzo",
-    role: "admin",
-  };
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (isLoading) return <Skeleton className="w-full h-full" />;
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
