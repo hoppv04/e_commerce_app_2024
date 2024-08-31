@@ -4,7 +4,7 @@ import {
   login,
   logout,
   register,
-} from "../controllers/auth/auth-controller.js";
+} from "../../controllers/auth/auth-controller.js";
 
 const router = express.Router();
 

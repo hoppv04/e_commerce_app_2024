@@ -16,6 +16,8 @@ const CommonForm = ({
   setFormData,
   handleSubmit,
   buttonText,
+  isLoading,
+  isBtnDisabled,
 }) => {
   const renderInputsByComponentType = (getControlItem) => {
     let element = null;
@@ -52,7 +54,7 @@ const CommonForm = ({
             value={value}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={getControlItem.placeholder} />
+              <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
             <SelectContent>
               {selectOptions && selectOptions.length > 0
@@ -115,7 +117,11 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-2 w-full">
+      <Button
+        type="submit"
+        className="mt-2 w-full"
+        disabled={isLoading || isBtnDisabled}
+      >
         {buttonText || "Submit"}
       </Button>
     </form>

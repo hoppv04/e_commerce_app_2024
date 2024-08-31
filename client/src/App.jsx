@@ -1,6 +1,10 @@
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./components/admin-view/Layout";
 import AuthLayout from "./components/auth/Layout";
+import CheckAuth from "./components/common/checkAuth";
 import ShoppingLayout from "./components/shopping-view/Layout";
 import AdminDashboard from "./pages/admin-view/Dashboard";
 import AdminOrders from "./pages/admin-view/Orders";
@@ -8,16 +12,13 @@ import AdminProducts from "./pages/admin-view/Products";
 import AuthLogin from "./pages/auth/Login";
 import AuthRegister from "./pages/auth/Register";
 import NotFound from "./pages/not-found";
+import ShoppingAccount from "./pages/shopping-view/Accout";
+import ShoppingCheckout from "./pages/shopping-view/Checkout";
 import ShoppingHome from "./pages/shopping-view/Home";
 import ShoppingListing from "./pages/shopping-view/Listing";
-import ShoppingCheckout from "./pages/shopping-view/Checkout";
-import ShoppingAccount from "./pages/shopping-view/Accout";
-import CheckAuth from "./components/common/checkAuth";
 import UnAuthPage from "./pages/unauth-page";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
-import { Skeleton } from "./components/ui/skeleton";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -29,7 +30,12 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="w-full h-full" />;
+  if (isLoading)
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">

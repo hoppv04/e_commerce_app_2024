@@ -40,7 +40,7 @@ export const register = async (req, res) => {
     console.log("Error in register function", error);
     return res.status(500).json({
       success: false,
-      message: "Some error occurred",
+      error: "Some error occurred",
     });
   }
 };
@@ -95,7 +95,7 @@ export const login = async (req, res) => {
     console.log("Error in login function", error);
     return res.status(500).json({
       success: false,
-      message: "Some error occurred",
+      error: "Some error occurred",
     });
   }
 };
@@ -110,7 +110,7 @@ export const logout = async (req, res) => {
     console.log("Error in logout function", error);
     return res.status(500).json({
       success: false,
-      message: "Some error occurred",
+      error: "Some error occurred",
     });
   }
 };
@@ -132,7 +132,7 @@ export const authMiddleWare = async (req, res, next) => {
     console.log("Error in logout function", error);
     return res.status(401).json({
       success: false,
-      message: "Unauthorized user!",
+      error: "Unauthorized user!",
     });
   }
 };
