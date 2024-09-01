@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import express from "express";
 import connectMongoDB from "./configs/connectDB.js";
 import authRouter from "./routes/auth/auth-routes.js";
-import adminRouter from "./routes/admin/products-routes.js";
+import adminProductRouter from "./routes/admin/product-routes.js";
+import shopProductRouter from "./routes/shop/product-routes.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRouter);
-app.use("/api/admin/products", adminRouter);
+app.use("/api/admin/products", adminProductRouter);
+app.use("/api/shop/products", shopProductRouter);
 
 app.listen(PORT, () => console.log(`Server is now running on port ${PORT}`));

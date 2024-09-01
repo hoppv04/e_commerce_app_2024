@@ -6,7 +6,7 @@ import {
   editProduct,
   fetchAllProducts,
   handleImageUpload,
-} from "../../controllers/admin/product-controller.js";
+} from "../../controllers/admin/product-controllers.js";
 
 const router = express.Router();
 

@@ -1,15 +1,14 @@
+import axios from "axios";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import LoadingSpinner from "../common/LoadingSpinner";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Button } from "../ui/button";
-import axios from "axios";
-import LoadingSpinner from "../common/LoadingSpinner";
 
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
-  uploadedImageUrl,
   setUploadedImageUrl,
   imageLoadingState,
   setImageLoadingState,

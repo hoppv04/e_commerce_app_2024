@@ -1,7 +1,7 @@
 import { imageUploadUtil } from "../../helpers/cloudinary.js";
 import Product from "../../models/Product.js";
 import { productSchema } from "../../schemas/product-schema.js";
-import { validateData } from "./../../helpers/validateData.js";
+import { validateData } from "../../helpers/validateData.js";
 
 export const handleImageUpload = async (req, res) => {
   try {
