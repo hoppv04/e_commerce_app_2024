@@ -1,4 +1,5 @@
 import ProductFilter from "@/components/shopping-view/Filter";
+import ProductDetailsDialog from "@/components/shopping-view/ProductDetails";
 import ShoppingProductItem from "@/components/shopping-view/ProductItem";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
 import { createSearchParamsHelper } from "@/lib/helpers";
-import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +22,13 @@ import { useSearchParams } from "react-router-dom";
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const handleSort = (value) => {
     setSort(value);
@@ -50,6 +57,10 @@ const ShoppingListing = () => {
     sessionStorage.setItem("filter", JSON.stringify(cpyFilter));
   };
 
+  const handleGetProductDetails = (getCurrentProductId) => {
+    dispatch(fetchProductDetails(getCurrentProductId));
+  };
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilter(JSON.parse(sessionStorage.getItem("filter")) || {});
@@ -68,6 +79,12 @@ const ShoppingListing = () => {
         fetchAllFilteredProducts({ filterParams: filter, sortParams: sort })
       );
   }, [dispatch, sort, filter]);
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOpenDetailsDialog(true);
+    }
+  }, [productDetails]);
 
   return (
     <div className="grid grid-colds-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -109,6 +126,7 @@ const ShoppingListing = () => {
           {productList && productList.length > 0
             ? productList.map((productItem) => (
                 <ShoppingProductItem
+                  handleGetProductDetails={handleGetProductDetails}
                   product={productItem}
                   key={productItem?._id}
                 />
@@ -116,6 +134,11 @@ const ShoppingListing = () => {
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
