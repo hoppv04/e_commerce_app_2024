@@ -1,14 +1,41 @@
 import { StarIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "../ui/use-toast";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
+
+  const handleAddToCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart",
+        });
+      }
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
+      <DialogContent
+        className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]"
+        aria-describedby={undefined}
+      >
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={productDetails?.image}
@@ -20,7 +47,9 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
         </div>
         <div className="">
           <div>
-            <h1 className="text-3xl font-extrabold">{productDetails?.title}</h1>
+            <DialogTitle className="text-3xl font-bold">
+              {productDetails?.title}
+            </DialogTitle>
             <p className="text-muted-foreground text-2xl mb-5 mt-2">
               {productDetails?.description}
             </p>
@@ -50,7 +79,12 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
             <span className="text-muted-foreground">(4.5)</span>
           </div>
           <div className="my-5">
-            <Button className="w-full">Add to cart</Button>
+            <Button
+              onClick={() => handleAddToCart(productDetails?._id)}
+              className="w-full"
+            >
+              Add to cart
+            </Button>
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto">
