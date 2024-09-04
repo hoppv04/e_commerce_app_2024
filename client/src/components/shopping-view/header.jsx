@@ -1,9 +1,10 @@
-import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { Button } from "../ui/button";
-import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
+import { logoutUser } from "@/store/auth-slice";
+import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,24 +13,40 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { logoutUser } from "@/store/auth-slice";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
-import UserCartWrapper from "./CartWrapper";
-import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
+import { useEffect, useState } from "react";
+import { Label } from "../ui/label";
+import UserCartWrapper from "./CartWrapper";
 
 const MenuItems = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (getCurrentMenuItem) => {
+    sessionStorage.removeItem("filter");
+    const currentFilter =
+      getCurrentMenuItem.id !== "home"
+        ? {
+            category: [getCurrentMenuItem.id],
+          }
+        : null;
+
+    sessionStorage.setItem("filter", JSON.stringify(currentFilter));
+
+    navigate(getCurrentMenuItem.path);
+  };
+
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
-          className="text-sm font-medium"
+        <Label
+          onClick={() => handleNavigate(menuItem)}
+          className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
-          to={menuItem.path}
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
