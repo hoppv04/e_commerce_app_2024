@@ -80,6 +80,7 @@ const HeaderRightContent = () => {
         </Button>
         <UserCartWrapper
           cartItems={cartItems?.items?.length > 0 ? cartItems.items : []}
+          setOpenCartSheet={setOpenCartSheet}
         />
       </Sheet>
       <DropdownMenu>
