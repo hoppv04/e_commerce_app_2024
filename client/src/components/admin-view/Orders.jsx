@@ -1,8 +1,8 @@
 import {
-  getAllOrdersByUserId,
-  getOrderDetails,
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
   resetOrderDetails,
-} from "@/store/shop/order-slice";
+} from "@/store/admin/orders-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BadgeCommon from "../common/BadgeCommon";
@@ -17,20 +17,19 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import ShoppingOrderDetailsView from "./OrderDetails";
+import AdminOrderDetailsView from "./OrderDetails";
 
-const ShoppingOrders = () => {
+const AdminOrdersView = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
 
-  const handleFetchOrderDetails = (getId) => {
-    dispatch(getOrderDetails(getId));
+  const handleFetchOrderDetails = async (getId) => {
+    dispatch(getOrderDetailsForAdmin(getId));
   };
 
   useEffect(() => {
-    dispatch(getAllOrdersByUserId(user?.id));
+    dispatch(getAllOrdersForAdmin());
   }, [dispatch]);
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const ShoppingOrders = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Order History</CardTitle>
+        <CardTitle>All Orders</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -84,7 +83,7 @@ const ShoppingOrders = () => {
                         >
                           View Details
                         </Button>
-                        <ShoppingOrderDetailsView orderDetails={orderDetails} />
+                        <AdminOrderDetailsView orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>
@@ -97,4 +96,4 @@ const ShoppingOrders = () => {
   );
 };
 
-export default ShoppingOrders;
+export default AdminOrdersView;

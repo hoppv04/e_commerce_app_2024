@@ -2,7 +2,12 @@ import { shoppingViewHeaderMenuItems } from "@/config";
 import { logoutUser } from "@/store/auth-slice";
 import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
@@ -22,11 +27,13 @@ import UserCartWrapper from "./CartWrapper";
 
 const MenuItems = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleNavigate = (getCurrentMenuItem) => {
     sessionStorage.removeItem("filter");
     const currentFilter =
-      getCurrentMenuItem.id !== "home"
+      getCurrentMenuItem.id !== "home" && getCurrentMenuItem.id !== "products"
         ? {
             category: [getCurrentMenuItem.id],
           }
@@ -34,7 +41,11 @@ const MenuItems = () => {
 
     sessionStorage.setItem("filter", JSON.stringify(currentFilter));
 
-    navigate(getCurrentMenuItem.path);
+    location.pathname.includes("listing") && currentFilter !== null
+      ? setSearchParams(
+          new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+        )
+      : navigate(getCurrentMenuItem.path);
   };
 
   return (
@@ -42,7 +53,7 @@ const MenuItems = () => {
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Label
           onClick={() => handleNavigate(menuItem)}
-          className="text-sm font-medium cursor-pointer"
+          className="text-base font-medium cursor-pointer hover:underline"
           key={menuItem.id}
         >
           {menuItem.label}
@@ -52,7 +63,11 @@ const MenuItems = () => {
   );
 };
 
-const HeaderRightContent = () => {
+const HeaderRightContent = ({
+  setOpenHeaderSheet,
+  openDropDownMenu,
+  setOpenDropDownMenu,
+}) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
@@ -83,9 +98,9 @@ const HeaderRightContent = () => {
           setOpenCartSheet={setOpenCartSheet}
         />
       </Sheet>
-      <DropdownMenu>
+      <DropdownMenu open={openDropDownMenu} onOpenChange={setOpenDropDownMenu}>
         <DropdownMenuTrigger asChild>
-          <Avatar className="bg-black">
+          <Avatar className="bg-black cursor-pointer">
             <AvatarFallback className="bg-black text-white font-extrabold">
               {user?.userName[0].toUpperCase()}
             </AvatarFallback>
@@ -94,7 +109,13 @@ const HeaderRightContent = () => {
         <DropdownMenuContent side="left" className="w-56">
           <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => navigate("/shop/account")}>
+          <DropdownMenuItem
+            onClick={() => {
+              navigate("/shop/account");
+              setOpenHeaderSheet ? setOpenHeaderSheet(false) : null;
+              setOpenDropDownMenu ? setOpenDropDownMenu(false) : null;
+            }}
+          >
             <UserCog className="size-4 mr-2" />
             Account
           </DropdownMenuItem>
@@ -110,6 +131,9 @@ const HeaderRightContent = () => {
 };
 
 const ShoppingHeader = () => {
+  const [openHeaderSheet, setOpenHeaderSheet] = useState(false);
+  const [openDropDownMenu, setOpenDropDownMenu] = useState(false);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
@@ -117,7 +141,7 @@ const ShoppingHeader = () => {
           <House className="h-6 w-6" />
           <span className="font-bold">E-commerce</span>
         </Link>
-        <Sheet>
+        <Sheet open={openHeaderSheet} onOpenChange={setOpenHeaderSheet}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="lg:hidden">
               <Menu className="w-6 h-6" />
@@ -130,14 +154,17 @@ const ShoppingHeader = () => {
             aria-describedby={undefined}
           >
             <MenuItems />
-            <HeaderRightContent />
+            <HeaderRightContent setOpenHeaderSheet={setOpenHeaderSheet} />
           </SheetContent>
         </Sheet>
         <div className="hidden lg:block">
           <MenuItems />
         </div>
         <div className="hidden lg:block">
-          <HeaderRightContent />
+          <HeaderRightContent
+            openDropDownMenu={openDropDownMenu}
+            setOpenDropDownMenu={setOpenDropDownMenu}
+          />
         </div>
       </div>
     </header>

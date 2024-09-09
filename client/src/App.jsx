@@ -1,10 +1,10 @@
-import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./components/admin-view/Layout";
 import AuthLayout from "./components/auth/Layout";
 import CheckAuth from "./components/common/checkAuth";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 import ShoppingLayout from "./components/shopping-view/Layout";
 import AdminDashboard from "./pages/admin-view/Dashboard";
 import AdminOrders from "./pages/admin-view/Orders";
@@ -16,9 +16,10 @@ import ShoppingAccount from "./pages/shopping-view/Accout";
 import ShoppingCheckout from "./pages/shopping-view/Checkout";
 import ShoppingHome from "./pages/shopping-view/Home";
 import ShoppingListing from "./pages/shopping-view/Listing";
+import PaypalReturnPage from "./pages/shopping-view/PaypalReturn";
 import UnAuthPage from "./pages/unauth-page";
 import { checkAuth } from "./store/auth-slice";
-import LoadingSpinner from "./components/common/LoadingSpinner";
+import PaymentSuccessPage from "./pages/shopping-view/PaymentSuccess";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -87,6 +88,8 @@ function App() {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
+          <Route path="paypal-return" element={<PaypalReturnPage />} />
+          <Route path="payment-success" element={<PaymentSuccessPage />} />
         </Route>
 
         <Route path="/unauth-page" element={<UnAuthPage />} />
