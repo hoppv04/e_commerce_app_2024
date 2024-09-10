@@ -10,7 +10,7 @@ const initialState = {
 };
 
 export const createNewOrder = createAsyncThunk(
-  "/order/create-new-order",
+  "/order/createNewOrder",
   async (orderData) => {
     try {
       const response = await axios.post(
@@ -26,7 +26,7 @@ export const createNewOrder = createAsyncThunk(
 );
 
 export const capturePayment = createAsyncThunk(
-  "/order/capture-payment",
+  "/order/capturePayment",
   async ({ paymentId, payerId, orderId }) => {
     try {
       const response = await axios.post(
@@ -42,7 +42,7 @@ export const capturePayment = createAsyncThunk(
 );
 
 export const getAllOrdersByUserId = createAsyncThunk(
-  "/order/get-all-orders",
+  "/order/getAllOrdersByUserId",
   async (userId) => {
     try {
       const response = await axios.get(
@@ -57,7 +57,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
 );
 
 export const getOrderDetails = createAsyncThunk(
-  "/order/get-order-details",
+  "/order/getOrderDetails",
   async (id) => {
     try {
       const response = await axios.get(

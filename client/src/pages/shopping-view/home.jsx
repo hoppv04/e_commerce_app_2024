@@ -20,7 +20,7 @@ import {
   WashingMachine,
   WatchIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import bannerOne from "../../assets/banner-1.webp";
 import bannerTwo from "../../assets/banner-2.webp";
@@ -68,9 +68,12 @@ const ShoppingHome = () => {
     navigate(`/shop/listing`);
   };
 
-  const handleGetProductDetails = (getCurrentProductId) => {
-    dispatch(fetchProductDetails(getCurrentProductId));
-  };
+  const handleGetProductDetails = useCallback(
+    (getCurrentProductId) => {
+      dispatch(fetchProductDetails(getCurrentProductId));
+    },
+    [dispatch]
+  );
 
   const handleAddToCart = (getCurrentProductId) => {
     dispatch(

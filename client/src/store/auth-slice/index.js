@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const registerUser = createAsyncThunk(
-  "/auth/register",
+  "/auth/registerUser",
   async (formData) => {
     try {
       const response = await axios.post(
@@ -26,23 +26,26 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
+export const loginUser = createAsyncThunk(
+  "/auth/loginUser",
+  async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
 
-    return response.data;
-  } catch (error) {
-    return error?.response?.data;
+      return response.data;
+    } catch (error) {
+      return error?.response?.data;
+    }
   }
-});
+);
 
-export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
+export const checkAuth = createAsyncThunk("/auth/checkAuth", async () => {
   try {
     const response = await axios.get(
       "http://localhost:5000/api/auth/check-auth",
@@ -62,7 +65,7 @@ export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
   }
 });
 
-export const logoutUser = createAsyncThunk("/auth/logout", async () => {
+export const logoutUser = createAsyncThunk("/auth/logoutUser", async () => {
   try {
     const response = await axios.post(
       "http://localhost:5000/api/auth/logout",

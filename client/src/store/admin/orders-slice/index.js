@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const getAllOrdersForAdmin = createAsyncThunk(
-  "/order/get-all-orders-for-admin",
+  "/order/getAllOrdersForAdmin",
   async () => {
     try {
       const response = await axios.get(
@@ -23,7 +23,7 @@ export const getAllOrdersForAdmin = createAsyncThunk(
 );
 
 export const getOrderDetailsForAdmin = createAsyncThunk(
-  "/order/get-order-details-for-admin",
+  "/order/getOrderDetailsForAdmin",
   async (id) => {
     try {
       const response = await axios.get(
@@ -38,7 +38,7 @@ export const getOrderDetailsForAdmin = createAsyncThunk(
 );
 
 export const updateOrderStatus = createAsyncThunk(
-  "/order/update-order-status",
+  "/order/updateOrderStatus",
   async ({ id, orderStatus }) => {
     try {
       const response = await axios.put(

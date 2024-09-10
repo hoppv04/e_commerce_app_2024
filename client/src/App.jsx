@@ -20,6 +20,7 @@ import PaypalReturnPage from "./pages/shopping-view/PaypalReturn";
 import UnAuthPage from "./pages/unauth-page";
 import { checkAuth } from "./store/auth-slice";
 import PaymentSuccessPage from "./pages/shopping-view/PaymentSuccess";
+import SearchProducts from "./pages/shopping-view/Search";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -90,6 +91,7 @@ function App() {
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
           <Route path="payment-success" element={<PaymentSuccessPage />} />
+          <Route path="search" element={<SearchProducts />} />
         </Route>
 
         <Route path="/unauth-page" element={<UnAuthPage />} />

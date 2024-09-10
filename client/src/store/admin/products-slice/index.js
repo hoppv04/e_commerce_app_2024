@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const addNewProduct = createAsyncThunk(
-  "/products/add-new-product",
+  "/products/addNewProduct",
   async (formData) => {
     try {
       const result = await axios.post(
@@ -28,7 +28,7 @@ export const addNewProduct = createAsyncThunk(
 );
 
 export const fetchAllProducts = createAsyncThunk(
-  "/products/fetch-all-products",
+  "/products/fetchAllProducts",
   async () => {
     try {
       const result = await axios.get(
@@ -43,7 +43,7 @@ export const fetchAllProducts = createAsyncThunk(
 );
 
 export const editProduct = createAsyncThunk(
-  "/products/edit-product",
+  "/products/editProduct",
   async ({ id, formData }) => {
     try {
       const result = await axios.put(
@@ -64,7 +64,7 @@ export const editProduct = createAsyncThunk(
 );
 
 export const deleteProduct = createAsyncThunk(
-  "/products/delete-product",
+  "/products/deleteProduct",
   async (id) => {
     try {
       const result = await axios.delete(

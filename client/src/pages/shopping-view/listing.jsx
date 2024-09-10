@@ -18,7 +18,7 @@ import {
   fetchProductDetails,
 } from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
@@ -64,9 +64,12 @@ const ShoppingListing = () => {
     sessionStorage.setItem("filter", JSON.stringify(cpyFilter));
   };
 
-  const handleGetProductDetails = (getCurrentProductId) => {
-    dispatch(fetchProductDetails(getCurrentProductId));
-  };
+  const handleGetProductDetails = useCallback(
+    (getCurrentProductId) => {
+      dispatch(fetchProductDetails(getCurrentProductId));
+    },
+    [dispatch]
+  );
 
   const handleAddToCart = (getCurrentProductId, getTotalStock) => {
     let getCartItems = cartItems.items || [];
