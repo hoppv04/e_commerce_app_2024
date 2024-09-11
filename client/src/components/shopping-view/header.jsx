@@ -82,7 +82,7 @@ const HeaderRightContent = ({
 
   useEffect(() => {
     dispatch(fetchCartItems(user?.id));
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
@@ -91,8 +91,12 @@ const HeaderRightContent = ({
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
           size="icon"
+          className="relative"
         >
           <ShoppingCart className="size-6" />
+          <span className="absolute top-[-3px] right-[1px] font-bold text-sm">
+            {cartItems?.items?.length || "0"}
+          </span>
           <span className="sr-only">User cart</span>
         </Button>
         <UserCartWrapper

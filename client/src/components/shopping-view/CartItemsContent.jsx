@@ -19,7 +19,7 @@ const UserCartItemsContent = ({ cartItem }) => {
 
   const handleUpdateQuantity = (typeOfAction) => {
     if (typeOfAction === "plus") {
-      let getCartItems = cartItems.items || [];
+      const getCartItems = cartItems?.items || [];
 
       if (getCartItems.length) {
         const indexOfCurrentCartItem = getCartItems.findIndex(

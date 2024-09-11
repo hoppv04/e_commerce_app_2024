@@ -107,7 +107,7 @@ export const capturePayment = async (req, res) => {
     }
 
     order.paymentStatus = "paid";
-    order.orderStatus = "confirm";
+    order.orderStatus = "confirmed";
     order.paymentId = paymentId;
     order.payerId = payerId;
 

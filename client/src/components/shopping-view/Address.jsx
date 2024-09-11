@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CommonForm from "../common/Form";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { addressFormControls } from "@/config";
@@ -20,7 +20,7 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const Address = ({ setCurrentSelectedAddress }) => {
+const Address = ({ setCurrentSelectedAddress, addressSelectedId }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const dispatch = useDispatch();
@@ -109,16 +109,14 @@ const Address = ({ setCurrentSelectedAddress }) => {
     });
   };
 
-  const isFormInValid = () => {
-    return (
-      Object.keys(formData).filter((key) => formData[key].trim() === "")
-        .length > 0
-    );
-  };
+  const isFormInValid = useMemo(
+    () => Object.values(formData).some((value) => value.trim() === ""),
+    [formData]
+  );
 
   useEffect(() => {
     dispatch(fetchAllAddresses(user?.id));
-  }, [dispatch]);
+  }, [dispatch, user?.id]);
 
   return (
     <Card>
@@ -126,6 +124,7 @@ const Address = ({ setCurrentSelectedAddress }) => {
         {addressList && addressList.length > 0
           ? addressList.map((singleAddressItem) => (
               <AddressCard
+                addressSelectedId={addressSelectedId}
                 setCurrentSelectedAddress={setCurrentSelectedAddress}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEditAddress={handleEditAddress}
@@ -147,7 +146,7 @@ const Address = ({ setCurrentSelectedAddress }) => {
           setFormData={setFormData}
           buttonText={currentEditedId !== null ? "Edit" : "Add"}
           handleSubmit={handleManageAddress}
-          isBtnDisabled={isFormInValid()}
+          isBtnDisabled={isFormInValid}
         />
       </CardContent>
     </Card>

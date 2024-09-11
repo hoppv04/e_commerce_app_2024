@@ -7,25 +7,29 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
     location.pathname.includes("/register");
   const isAdminPage = location.pathname.includes("/admin");
   const isShopPage = location.pathname.includes("/shop");
+  const isAdmin = user?.role === "admin";
+  const adminPath = "/admin/dashboard";
+  const shopPath = "/shop/home";
+  const loginPath = "/auth/login";
 
-  if (!isAuthenticated && !isAuthPage) {
-    return <Navigate to="/auth/login" />;
+  const navigateToHome = () => {
+    return isAdmin ? <Navigate to={adminPath} /> : <Navigate to={shopPath} />;
+  };
+
+  if (location.pathname === "/") {
+    return isAuthenticated ? navigateToHome() : <Navigate to={loginPath} />;
   }
 
-  if (isAuthenticated && isAuthPage) {
-    return user?.role === "admin" ? (
-      <Navigate to="/admin/dashboard" />
-    ) : (
-      <Navigate to="/shop/home" />
-    );
-  }
-
-  if (isAuthenticated && user?.role !== "admin" && isAdminPage) {
-    return <Navigate to="/unauth-page" />;
-  }
-
-  if (isAuthenticated && user?.role === "admin" && isShopPage) {
-    return <Navigate to="/admin/dashboard" />;
+  if (isAuthenticated) {
+    if (isAuthPage) {
+      return navigateToHome();
+    }
+    if (!isAdmin && isAdminPage) {
+      return <Navigate to="/unauth-page" />;
+    }
+    if (isAdmin && isShopPage) return <Navigate to={adminPath} />;
+  } else {
+    if (!isAuthPage) return <Navigate to={loginPath} />;
   }
 
   return <>{children}</>;

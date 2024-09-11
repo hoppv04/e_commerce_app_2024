@@ -16,7 +16,7 @@ import {
   editProduct,
   fetchAllProducts,
 } from "@/store/admin/products-slice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const initialFormData = {
@@ -86,11 +86,13 @@ const AdminProducts = () => {
         });
   };
 
-  const isFormValid = () => {
-    return (
-      Object.keys(formData).filter((item) => formData[item] === "").length > 0
-    );
-  };
+  const isFormInValid = useMemo(
+    () =>
+      Object.values(formData).some(
+        (value) => value === null || value.trim() === ""
+      ),
+    [formData]
+  );
 
   const handleDeleteProduct = (getCurrentProductId) => {
     dispatch(deleteProduct(getCurrentProductId)).then((data) => {
@@ -161,7 +163,7 @@ const AdminProducts = () => {
               buttonText={currentEditedId !== null ? "Edit" : "Add"}
               handleSubmit={handleSubmit}
               isLoading={imageLoadingState}
-              isBtnDisabled={isFormValid()}
+              isBtnDisabled={isFormInValid}
             />
           </div>
         </SheetContent>

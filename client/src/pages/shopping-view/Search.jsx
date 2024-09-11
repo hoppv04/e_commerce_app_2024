@@ -26,7 +26,7 @@ const SearchProducts = () => {
 
   const handleAddToCart = useCallback(
     (getCurrentProductId, getTotalStock) => {
-      const getCartItems = cartItems.items || [];
+      const getCartItems = cartItems?.items || [];
 
       if (getCartItems.length) {
         const indexOfCurrentItem = getCartItems.findIndex(

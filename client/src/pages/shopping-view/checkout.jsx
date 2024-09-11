@@ -3,9 +3,10 @@ import img from "../../assets/account.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-view/CartItemsContent";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { useToast } from "@/components/ui/use-toast";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -16,8 +17,8 @@ const ShoppingCheckout = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
-  const totalCartAmount =
-    cartItems?.items?.length > 0
+  const totalCartAmount = useMemo(() => {
+    return cartItems?.items?.length > 0
       ? cartItems?.items?.reduce(
           (total, currentItem) =>
             total +
@@ -28,6 +29,7 @@ const ShoppingCheckout = () => {
           0
         )
       : 0;
+  }, [cartItems]);
 
   const handleInitiatePaypalPayment = () => {
     if (cartItems?.items?.length === 0) {
@@ -88,9 +90,11 @@ const ShoppingCheckout = () => {
     });
   };
 
-  if (approvalURL) {
-    window.location.href = approvalURL;
-  }
+  useEffect(() => {
+    if (approvalURL) {
+      window.location.href = approvalURL;
+    }
+  }, [approvalURL]);
 
   return (
     <div className="flex flex-col">
@@ -98,7 +102,10 @@ const ShoppingCheckout = () => {
         <img src={img} className="size-full object-fill object-center" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+        <Address
+          addressSelectedId={currentSelectedAddress}
+          setCurrentSelectedAddress={setCurrentSelectedAddress}
+        />
         <div className="flex flex-col gap-4">
           {cartItems?.items?.length > 0
             ? cartItems?.items.map((item) => (
@@ -112,8 +119,12 @@ const ShoppingCheckout = () => {
             </div>
           </div>
           <div className="mt-4 w-full">
-            <Button onClick={handleInitiatePaypalPayment} className="w-full">
-              Checkout with Paypal
+            <Button
+              onClick={handleInitiatePaypalPayment}
+              className="w-full"
+              disabled={isPaymentStart}
+            >
+              {isPaymentStart ? <LoadingSpinner /> : "Checkout with Paypal"}
             </Button>
           </div>
         </div>
