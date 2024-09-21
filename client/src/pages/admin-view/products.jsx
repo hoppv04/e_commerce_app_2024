@@ -88,9 +88,7 @@ const AdminProducts = () => {
 
   const isFormInValid = useMemo(
     () =>
-      Object.values(formData).some(
-        (value) => value === null || value.trim() === ""
-      ),
+      Object.values(formData).some((value) => value === null || value === ""),
     [formData]
   );
 
